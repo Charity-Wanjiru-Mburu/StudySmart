@@ -1,9 +1,10 @@
-package com.Charity.study_smart.di
+package com.Charity.Study_smart.di
 
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.Charity.study_smart.R
+import com.Charity.study_smart.ui.theme.presentation.session.ServiceHelper
 import com.Charity.study_smart.ui.theme.util.Constants.NOTIFICATION_CHANNEL_ID
 import dagger.Module
 import dagger.Provides

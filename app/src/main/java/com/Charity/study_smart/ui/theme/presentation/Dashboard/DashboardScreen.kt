@@ -1,8 +1,19 @@
 package com.Charity.study_smart.ui.theme.presentation.Dashboard
 
+import com.Charity.study_smart.domain.model.Session
+import com.Charity.study_smart.domain.model.Subject
+import com.Charity.study_smart.domain.model.Task
+import com.Charity.study_smart.ui.theme.presentation.components.AddSubjectDialog
 import com.Charity.study_smart.ui.theme.presentation.components.CountCard
+import com.Charity.study_smart.ui.theme.presentation.components.DeleteDialog
+import com.Charity.study_smart.ui.theme.presentation.components.SubjectCard
+import com.Charity.study_smart.ui.theme.presentation.components.studySessionsList
+import com.Charity.study_smart.ui.theme.presentation.components.tasksList
+import com.Charity.study_smart.ui.theme.presentation.session.SessionScreenRoute
+import com.Charity.study_smart.ui.theme.presentation.task.TaskScreenNavArgs
+import com.Charity.study_smart.ui.theme.util.SnackbarEvent
 
-package com.example.studysmart.presentation.dashboard
+
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -46,22 +57,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.studysmart.R
-import com.example.studysmart.domain.model.Session
-import com.example.studysmart.domain.model.Subject
-import com.example.studysmart.domain.model.Task
-import com.example.studysmart.presentation.components.AddSubjectDialog
-import com.example.studysmart.presentation.components.CountCard
-import com.example.studysmart.presentation.components.DeleteDialog
-import com.example.studysmart.presentation.components.SubjectCard
-import com.example.studysmart.presentation.components.studySessionsList
-import com.example.studysmart.presentation.components.tasksList
-import com.example.studysmart.presentation.destinations.SessionScreenRouteDestination
-import com.example.studysmart.presentation.destinations.SubjectScreenRouteDestination
-import com.example.studysmart.presentation.destinations.TaskScreenRouteDestination
-import com.example.studysmart.presentation.subject.SubjectScreenNavArgs
-import com.example.studysmart.presentation.task.TaskScreenNavArgs
-import com.example.studysmart.util.SnackbarEvent
+import com.Charity.study_smart.ui.theme.presentation.task.TaskScreenRoute
+
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -97,7 +94,7 @@ fun DashboardScreenRoute(
             navigator.navigate(TaskScreenRouteDestination(navArgs = navArg))
         },
         onStartSessionButtonClick = {
-            navigator.navigate(SessionScreenRouteDestination())
+            navigator.navigate(SessionScreenRoute())
         }
     )
 }

@@ -1,8 +1,6 @@
 package com.Charity.study_smart.ui.theme.presentation.Dashboard
 
 import androidx.compose.ui.graphics.Color
-import com.example.studysmart.domain.model.Session
-import com.example.studysmart.domain.model.Subject
 
 data class DashboardState(
     val totalSubjectCount: Int = 0,

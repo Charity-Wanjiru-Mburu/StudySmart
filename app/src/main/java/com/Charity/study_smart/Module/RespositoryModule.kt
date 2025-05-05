@@ -1,4 +1,4 @@
-package com.Charity.study_smart.di
+package com.Charity.Study_smart.di
 
 import com.Charity.study_smart.data.respiratory.SessionRepositoryImpl
 import com.Charity.study_smart.data.respiratory.SubjectRepositoryImpl

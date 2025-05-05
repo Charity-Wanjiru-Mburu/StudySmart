@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import com.Charity.study_smart.ui.theme.util.Constants.CLICK_REQUEST_CODE
+import kotlin.jvm.java
 
 object ServiceHelper {
 
@@ -35,3 +36,4 @@ object ServiceHelper {
         }
     }
 }
+
