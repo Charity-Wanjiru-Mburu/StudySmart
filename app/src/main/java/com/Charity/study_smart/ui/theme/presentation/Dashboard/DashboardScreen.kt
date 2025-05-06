@@ -12,9 +12,9 @@ import com.Charity.study_smart.ui.theme.presentation.components.tasksList
 import com.Charity.study_smart.ui.theme.presentation.session.SessionScreenRoute
 import com.Charity.study_smart.ui.theme.presentation.task.TaskScreenNavArgs
 import com.Charity.study_smart.ui.theme.util.SnackbarEvent
+import com.Charity.study_smart.ui.theme.presentation.subject.SubjectScreenNavArgs
 
-
-
+import com.Charity.study_smart.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -57,6 +57,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.Charity.study_smart.navigation.ROUTE_SESSION
+import com.Charity.study_smart.navigation.ROUTE_SUBJECT
+import com.Charity.study_smart.navigation.ROUTE_TASK
 import com.Charity.study_smart.ui.theme.presentation.task.TaskScreenRoute
 
 import com.ramcosta.composedestinations.annotation.Destination
@@ -69,13 +75,13 @@ import kotlinx.coroutines.flow.collectLatest
 @Destination
 @Composable
 fun DashboardScreenRoute(
-    navigator: DestinationsNavigator
+    navController: NavHostController
 ) {
 
     val viewModel: DashboardViewModel = hiltViewModel()
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    val tasks by viewModel.tasks.collectAsStateWithLifecycle()
-    val recentSessions by viewModel.recentSessions.collectAsStateWithLifecycle()
+    val state by viewModel.state
+    val tasks by viewModel.tasks
+    val recentSessions by viewModel.recentSessions
 
     DashboardScreen(
         state = state,
@@ -86,22 +92,22 @@ fun DashboardScreenRoute(
         onSubjectCardClick = { subjectId ->
             subjectId?.let {
                 val navArg = SubjectScreenNavArgs(subjectId = subjectId)
-                navigator.navigate(SubjectScreenRouteDestination(navArgs = navArg))
+                navController.navigate(ROUTE_SUBJECT)
             }
         },
         onTaskCardClick = { taskId ->
             val navArg = TaskScreenNavArgs(taskId = taskId, subjectId = null)
-            navigator.navigate(TaskScreenRouteDestination(navArgs = navArg))
+            navController.navigate(ROUTE_TASK)
         },
         onStartSessionButtonClick = {
-            navigator.navigate(SessionScreenRoute())
+           navController.navigate(ROUTE_SESSION)
         }
     )
 }
 
 
 @Composable
-private fun DashboardScreen(
+ private fun DashboardScreen(
     state: DashboardState,
     tasks: List<Task>,
     recentSessions: List<Session>,

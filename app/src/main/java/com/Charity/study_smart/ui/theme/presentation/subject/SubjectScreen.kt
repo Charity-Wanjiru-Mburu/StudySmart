@@ -35,9 +35,11 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
@@ -46,7 +48,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.Charity.study_smart.domain.model.Task
+import com.Charity.study_smart.navigation.ROUTE_SESSION
+import com.Charity.study_smart.navigation.ROUTE_TASK
 import com.Charity.study_smart.ui.theme.presentation.components.AddSubjectDialog
 import com.Charity.study_smart.ui.theme.presentation.components.CountCard
 import com.Charity.study_smart.ui.theme.presentation.components.DeleteDialog
@@ -67,7 +72,7 @@ data class SubjectScreenNavArgs(
 @Destination(navArgsDelegate = SubjectScreenNavArgs::class)
 @Composable
 fun SubjectScreenRoute(
-    navigator: DestinationsNavigator
+    navController: NavHostController
 ) {
     val viewModel: SubjectViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -76,14 +81,14 @@ fun SubjectScreenRoute(
         state = state,
         onEvent = viewModel::onEvent,
         snackbarEvent = viewModel.snackbarEventFlow,
-        onBackButtonClick = { navigator.navigateUp() },
+        onBackButtonClick = { navController.navigateUp() },
         onAddTaskButtonClick = {
             val navArg = TaskScreenNavArgs(taskId = null, subjectId = state.currentSubjectId)
-            navigator.navigate(TaskScreenRouteDestination(navArgs = navArg))
+            navController.navigate(ROUTE_TASK)
         },
         onTaskCardClick = { taskId ->
             val navArg = TaskScreenNavArgs(taskId = taskId, subjectId = null)
-            navigator.navigate(TaskScreenRouteDestination(navArgs = navArg))
+            navController.navigate(ROUTE_SESSION)
         }
     )
 }

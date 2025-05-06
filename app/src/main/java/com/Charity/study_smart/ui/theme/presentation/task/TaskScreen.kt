@@ -36,15 +36,18 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.Charity.study_smart.ui.theme.presentation.components.DeleteDialog
 import com.Charity.study_smart.ui.theme.presentation.components.SubjectListBottomSheet
 import com.Charity.study_smart.ui.theme.presentation.components.TaskCheckBox
@@ -53,7 +56,6 @@ import com.Charity.study_smart.ui.theme.util.Priority
 import com.Charity.study_smart.ui.theme.util.SnackbarEvent
 import com.Charity.study_smart.ui.theme.util.changeMillisToDateString
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -67,7 +69,7 @@ data class TaskScreenNavArgs(
 @Destination(navArgsDelegate = TaskScreenNavArgs::class)
 @Composable
 fun TaskScreenRoute(
-    navigator: DestinationsNavigator
+    navController: NavHostController
 ) {
     val viewModel: TaskViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -75,7 +77,7 @@ fun TaskScreenRoute(
         state = state,
         snackbarEvent = viewModel.snackbarEventFlow,
         onEvent = viewModel::onEvent,
-        onBackButtonClick = { navigator.navigateUp() }
+        onBackButtonClick = { navController.navigateUp() }
     )
 }
 
@@ -226,18 +228,7 @@ private fun TaskScreen(
             Spacer(modifier = Modifier.height(10.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
                 Priority.entries.forEach { priority ->
-                    PriorityButton(
-                        modifier = Modifier.weight(1f),
-                        label = priority.title,
-                        backgroundColor = priority.color,
-                        borderColor = if (priority == state.priority) {
-                            Color.White
-                        } else Color.Transparent,
-                        labelColor = if (priority == state.priority) {
-                            Color.White
-                        } else Color.White.copy(alpha = 0.7f),
-                        onClick = { onEvent(TaskEvent.OnPriorityChange(priority)) }
-                    )
+                    PriorityButton()
                 }
             }
             Spacer(modifier = Modifier.height(30.dp))
@@ -280,7 +271,7 @@ private fun TaskScreen(
 private fun TaskScreenTopBar(
     isTaskExist: Boolean,
     isComplete: Boolean,
-    checkBoxBorderColor: Color,
+    checkBoxBorderColor: androidx.compose.ui.graphics.Color,
     onBackButtonClick: () -> Unit,
     onDeleteButtonClick: () -> Unit,
     onCheckBoxClick: () -> Unit,
@@ -322,7 +313,7 @@ private fun TaskScreenTopBar(
 private fun PriorityButton(
     modifier: Modifier = Modifier,
     label: String,
-    backgroundColor: Color,
+    backgroundColor: androidx.compose.ui.graphics.Color,
     borderColor: Color,
     labelColor: Int,
     onClick: () -> Unit
@@ -332,10 +323,10 @@ private fun PriorityButton(
             .background(backgroundColor)
             .clickable { onClick() }
             .padding(5.dp)
-            .border(1.dp, borderColor, RoundedCornerShape(5.dp))
+//            .border(1.dp, borderColor, RoundedCornerShape(5.dp))
             .padding(5.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = label, color = labelColor)
+        Text(text = "label", color = labelColor)
     }
 }

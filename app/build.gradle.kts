@@ -2,6 +2,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
+
+
+
+
+
 }
 
 android {
@@ -28,6 +35,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -50,6 +58,10 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+
+
+    implementation(libs.androidx.navigation.compose)
+
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.foundation.android)
     androidTestImplementation(libs.androidx.junit)
@@ -61,24 +73,26 @@ dependencies {
     //compose destination
     val destinationVersion = "1.9.52"
     implementation(libs.core)
-//    ksp(libs.ksp)
+    ksp(libs.ksp)
 
     // Room
     val roomVersion = "2.5.2"
     implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     //Dagger-Hilt
-    //noinspection UseTomlInstead
-    implementation("com.google.dagger:hilt-android:2.48")
-    implementation(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler.v100)
+    implementation(libs.androidx.hilt.navigation.compose.v100)
 
     //fonts
-    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.ui.text.google.fonts.v153)
 
     //Desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+
+//    implementation(libs.core.vversion)
+//    ksp(libs.ksp.vversion)
 }

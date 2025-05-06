@@ -39,10 +39,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,6 +52,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.Charity.study_smart.ui.theme.Red
 import com.Charity.study_smart.ui.theme.presentation.components.DeleteDialog
 import com.Charity.study_smart.ui.theme.presentation.components.SubjectListBottomSheet
@@ -77,7 +81,7 @@ import kotlin.time.DurationUnit
 )
 @Composable
 fun SessionScreenRoute(
-    navigator: DestinationsNavigator,
+    navController: NavHostController,
     timerService: StudySessionTimerService
 ) {
     val viewModel: SessionViewModel = hiltViewModel()
@@ -87,7 +91,7 @@ fun SessionScreenRoute(
         state = state,
         snackbarEvent = viewModel.snackbarEventFlow,
         onEvent = viewModel::onEvent,
-        onBackButtonClick = { navigator.navigateUp() },
+        onBackButtonClick = { navController.navigateUp() },
         timerService = timerService
     )
 }
