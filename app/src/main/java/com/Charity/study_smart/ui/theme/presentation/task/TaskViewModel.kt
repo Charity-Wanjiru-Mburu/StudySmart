@@ -23,6 +23,7 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import javax.inject.Inject
 
+
 @HiltViewModel
 class TaskViewModel @Inject constructor(
     private val taskRepository: TaskRepository,
@@ -30,7 +31,9 @@ class TaskViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val navArgs: TaskScreenNavArgs = savedStateHandle.navArg()
+    private val taskId: String? = savedStateHandle.get<String>("taskId")
+    private val subjectId: String? = savedStateHandle.get<String>("subjectId")
+
 
     private val _state = MutableStateFlow(TaskState())
     val state = combine(
@@ -167,7 +170,7 @@ class TaskViewModel @Inject constructor(
 
     private fun fetchTask() {
         viewModelScope.launch {
-            navArgs.taskId?.let { id ->
+            taskId?.let { id ->
                 taskRepository.getTaskById(id)?.let { task ->
                     _state.update {
                         it.copy(
@@ -188,7 +191,7 @@ class TaskViewModel @Inject constructor(
 
     private fun fetchSubject() {
         viewModelScope.launch {
-            navArgs.subjectId?.let { id ->
+            subjectId?.let { id ->
                 subjectRepository.getSubjectById(id)?.let { subject ->
                     _state.update {
                         it.copy(
@@ -200,5 +203,9 @@ class TaskViewModel @Inject constructor(
             }
         }
     }
-
 }
+
+
+
+
+

@@ -3,9 +3,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Upsert
 import com.Charity.study_smart.domain.model.Session
-import com.Charity.study_smart.domain.model.Subject
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,13 +19,13 @@ interface SessionDao {
     fun getAllSessions(): Flow<List<Session>>
 
     @Query("SELECT * FROM Session WHERE sessionSubjectId = :subjectId")
-    fun getRecentSessionsForSubject(subjectId: Int): Flow<List<Session>>
+    fun getRecentSessionsForSubject(subjectId: String): Flow<List<Session>>
 
     @Query("SELECT SUM(duration) FROM Session")
     fun getTotalSessionsDuration(): Flow<Long>
 
     @Query("SELECT SUM(duration) FROM Session WHERE sessionSubjectId = :subjectId")
-    fun getTotalSessionsDurationBySubject(subjectId: Int): Flow<Long>
+    fun getTotalSessionsDurationBySubject(subjectId: String): Flow<Long>
 
     @Query("DELETE FROM Session WHERE sessionSubjectId = :subjectId")
     fun deleteSessionsBySubjectId(subjectId: Int)

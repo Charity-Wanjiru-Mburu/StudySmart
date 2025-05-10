@@ -1,5 +1,7 @@
 package com.Charity.study_smart.ui.theme.presentation.components
 
+
+
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
@@ -13,6 +15,7 @@ import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun TaskDatePicker(
     state: DatePickerState,
     isOpen: Boolean,
@@ -25,7 +28,21 @@ fun TaskDatePicker(
         DatePickerDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = {
-                TextButton(onClick = onConfirmButtonClicked) {
+                TextButton(onClick = {
+                    val selectedDate = Instant
+                        .ofEpochMilli(state.selectedDateMillis ?: 0L)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                    val currentDate = LocalDate.now(ZoneId.systemDefault())
+
+                    if (selectedDate >= currentDate) {
+                        println("Valid Date Selected: $selectedDate")
+                        onConfirmButtonClicked() // Proceed
+                    } else {
+                        println("Invalid Date Selected: $selectedDate")
+                        // Show an error message or prevent submission
+                    }
+                }) {
                     Text(text = confirmButtonText)
                 }
             },
@@ -35,17 +52,7 @@ fun TaskDatePicker(
                 }
             },
             content = {
-                DatePicker(
-                    state = state,
-                    dateValidator = { timestamp ->
-                        val selectedDate = Instant
-                            .ofEpochMilli(timestamp)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate()
-                        val currentDate = LocalDate.now(ZoneId.systemDefault())
-                        selectedDate >= currentDate
-                    }
-                )
+                DatePicker(state = state) // Removed dateValidator
             }
         )
     }

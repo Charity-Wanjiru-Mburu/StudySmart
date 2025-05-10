@@ -33,7 +33,7 @@ class SubjectRepositoryImpl @Inject constructor(
         subjectDao.deleteSubject(subjectId)
     }
 
-    override suspend fun getSubjectById(subjectId: Int): Subject? {
+    override suspend fun getSubjectById(subjectId: String): Subject? {
         return subjectDao.getSubjectById(subjectId)
     }
 

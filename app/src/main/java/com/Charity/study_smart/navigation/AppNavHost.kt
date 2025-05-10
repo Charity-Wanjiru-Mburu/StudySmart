@@ -2,34 +2,45 @@ package com.Charity.study_smart.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.Charity.study_smart.ui.theme.presentation.Dashboard.DashboardScreen
+
 import com.Charity.study_smart.ui.theme.presentation.Dashboard.DashboardScreenRoute
-import com.Charity.study_smart.ui.theme.presentation.session.SessionScreen
+
 import com.Charity.study_smart.ui.theme.presentation.session.SessionScreenRoute
-import com.Charity.study_smart.ui.theme.presentation.subject.SubjectScreen
+
 import com.Charity.study_smart.ui.theme.presentation.subject.SubjectScreenRoute
 
 import com.Charity.study_smart.ui.theme.presentation.task.TaskScreenRoute
 
 
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.Charity.study_smart.ui.theme.presentation.session.StudySessionTimerService
+
+
 @Composable
-fun AppNavHost(modifier: Modifier = Modifier,
-               navController: NavController= rememberNavController(), startDestination: String=ROUTE_DASHBOARD) {
-    NavHost(navController= navController , modifier = modifier, startDestination = startDestination){
+fun AppNavHost(modifier: Modifier=Modifier,navController:NavHostController= rememberNavController(),startDestination:String= ROUTE_DASHBOARD) {
+
+    NavHost(navController = navController, modifier=modifier, startDestination = startDestination ){
         composable(ROUTE_DASHBOARD){
             DashboardScreenRoute(navController)
         }
-        composable(ROUTE_SUBJECT){
-            SubjectScreenRoute(navController)
+        composable(
+            route = "$ROUTE_SUBJECT/{subjectId}",
+            arguments = listOf(navArgument("subjectId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val subjectId = backStackEntry.arguments?.getString("subjectId") ?: ""
+            SubjectScreenRoute(navController, subjectId) // ✅ Pass subjectId
         }
-        composable(ROUTE_SESSION){
-            SessionScreenRoute(navController)
+
+        composable(ROUTE_SESSION) {
+            val studySessionTimerService = StudySessionTimerService() // ✅ Create an instance
+            SessionScreenRoute(navController, studySessionTimerService) // ✅ Pass the instance
         }
-        composable(ROUTE_TASK){
+        composable(ROUTE_TASK) {
             TaskScreenRoute(navController)
         }
 

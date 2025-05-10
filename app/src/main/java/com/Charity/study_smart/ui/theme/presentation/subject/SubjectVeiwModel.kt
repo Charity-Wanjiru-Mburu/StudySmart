@@ -34,15 +34,16 @@ class SubjectViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val navArgs: SubjectScreenNavArgs = savedStateHandle.navArgs()
+    private val subjectId: String = savedStateHandle.get<String>("subjectId") ?: ""
+
 
     private val _state = MutableStateFlow(SubjectState())
     val state = combine(
         _state,
-        taskRepository.getUpcomingTasksForSubject(navArgs.subjectId),
-        taskRepository.getCompletedTasksForSubject(navArgs.subjectId),
-        sessionRepository.getRecentTenSessionsForSubject(navArgs.subjectId),
-        sessionRepository.getTotalSessionsDurationBySubject(navArgs.subjectId)
+        subjectId.let { taskRepository.getUpcomingTasksForSubject(it) },
+        subjectId.let { taskRepository.getCompletedTasksForSubject(it) },
+        subjectId.let { sessionRepository.getRecentTenSessionsForSubject(it) },
+        subjectId.let { sessionRepository.getTotalSessionsDurationBySubject(it) }
     ) { state, upcomingTasks, completedTask, recentSessions, totalSessionsDuration ->
         state.copy(
             upcomingTasks = upcomingTasks,
@@ -50,7 +51,10 @@ class SubjectViewModel @Inject constructor(
             recentSessions = recentSessions,
             studiedHours = totalSessionsDuration.toHours()
         )
-    }.stateIn(
+    }
+
+
+        .stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
         initialValue = SubjectState()
@@ -134,8 +138,8 @@ class SubjectViewModel @Inject constructor(
 
     private fun fetchSubject() {
         viewModelScope.launch {
-            subjectRepository
-                .getSubjectById(navArgs.subjectId)?.let { subject ->
+            subjectId.let { id ->
+                subjectRepository.getSubjectById(id)?.let { subject -> // ✅ Use `subjectId`
                     _state.update {
                         it.copy(
                             subjectName = subject.name,
@@ -145,6 +149,7 @@ class SubjectViewModel @Inject constructor(
                         )
                     }
                 }
+            }
         }
     }
 

@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -54,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.Charity.study_smart.ui.theme.Red
 import com.Charity.study_smart.ui.theme.presentation.components.DeleteDialog
 import com.Charity.study_smart.ui.theme.presentation.components.SubjectListBottomSheet
@@ -64,7 +64,6 @@ import com.Charity.study_smart.ui.theme.util.Constants.ACTION_SERVICE_STOP
 import com.Charity.study_smart.ui.theme.util.SnackbarEvent
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -80,9 +79,10 @@ import kotlin.time.DurationUnit
     ]
 )
 @Composable
+
 fun SessionScreenRoute(
     navController: NavHostController,
-    timerService: StudySessionTimerService
+    studySessionTimerService: Unit // ✅ Pass the correct instance
 ) {
     val viewModel: SessionViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -92,9 +92,10 @@ fun SessionScreenRoute(
         snackbarEvent = viewModel.snackbarEventFlow,
         onEvent = viewModel::onEvent,
         onBackButtonClick = { navController.navigateUp() },
-        timerService = timerService
+        timerService = studySessionTimerService // ✅ Pass the correct instance
     )
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -263,7 +264,7 @@ private fun SessionScreenTopBar(
         navigationIcon = {
             IconButton(onClick = onBackButtonClick) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Navigate to Back Screen"
                 )
             }
@@ -416,4 +417,11 @@ private fun timerTextAnimation(duration: Int = 600): ContentTransform {
             fadeIn(animationSpec = tween(duration)) togetherWith
             slideOutVertically(animationSpec = tween(duration)) { fullHeight -> -fullHeight } +
             fadeOut(animationSpec = tween(duration))
+}
+
+@Composable
+
+fun SessionPreview() {
+    val studySessionTimerService = StudySessionTimerService()
+    SessionScreenRoute(navController = rememberNavController(), studySessionTimerService = StudySessionTimerService)
 }

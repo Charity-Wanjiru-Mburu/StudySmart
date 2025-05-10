@@ -37,7 +37,7 @@ fun SubjectListBottomSheet(
             sheetState = sheetState,
             onDismissRequest = onDismissRequest,
             dragHandle = {
-                Column (
+                Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -51,14 +51,14 @@ fun SubjectListBottomSheet(
             LazyColumn(
                 contentPadding = PaddingValues(16.dp)
             ) {
-                items(subjects) { subject ->
+                item(subjects) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onSubjectClicked(subject) }
-                            .padding(8.dp)
-                    ) {
-                        Text(text = subject.name)
+                            .padding(8.dp))
+                    {
+                        Text(text = "subjects")
+
                     }
                 }
                 if (subjects.isEmpty()) {
@@ -67,9 +67,12 @@ fun SubjectListBottomSheet(
                             modifier = Modifier.padding(10.dp),
                             text = "Ready to begin? First, add a subject."
                         )
+
                     }
+
                 }
             }
         }
+
     }
 }

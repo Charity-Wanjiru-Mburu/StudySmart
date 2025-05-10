@@ -81,9 +81,7 @@ class StudySessionTimerService : Service() {
 
     private fun stopForegroundService() {
         notificationManager.cancel(NOTIFICATION_ID)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(STOP_FOREGROUND_REMOVE)
-        }
+        stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
 

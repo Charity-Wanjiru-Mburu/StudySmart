@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import com.Charity.study_smart.navigation.AppNavHost
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
         }
 
 
-private fun MainActivity.Study_SmartTheme(function: () -> Unit) {
+private fun MainActivity.Study_SmartTheme(function: @Composable () -> Unit) {
 }
 }
 //class MainActivity : ComponentActivity() {

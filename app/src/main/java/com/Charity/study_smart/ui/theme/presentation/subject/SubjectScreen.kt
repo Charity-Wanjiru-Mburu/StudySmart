@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,7 +25,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -49,9 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.Charity.study_smart.domain.model.Task
+import androidx.navigation.compose.rememberNavController
 import com.Charity.study_smart.navigation.ROUTE_SESSION
 import com.Charity.study_smart.navigation.ROUTE_TASK
+import com.Charity.study_smart.ui.theme.presentation.Dashboard.DashboardScreenRoute
 import com.Charity.study_smart.ui.theme.presentation.components.AddSubjectDialog
 import com.Charity.study_smart.ui.theme.presentation.components.CountCard
 import com.Charity.study_smart.ui.theme.presentation.components.DeleteDialog
@@ -60,7 +59,6 @@ import com.Charity.study_smart.ui.theme.presentation.components.tasksList
 import com.Charity.study_smart.ui.theme.presentation.task.TaskScreenNavArgs
 import com.Charity.study_smart.ui.theme.util.SnackbarEvent
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -72,7 +70,8 @@ data class SubjectScreenNavArgs(
 @Destination(navArgsDelegate = SubjectScreenNavArgs::class)
 @Composable
 fun SubjectScreenRoute(
-    navController: NavHostController
+    navController: NavHostController,
+    subjectId: String // ✅ Accept subjectId directly
 ) {
     val viewModel: SubjectViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -81,13 +80,14 @@ fun SubjectScreenRoute(
         state = state,
         onEvent = viewModel::onEvent,
         snackbarEvent = viewModel.snackbarEventFlow,
-        onBackButtonClick = { navController.navigateUp() },
+        onBackButtonClick = {navController.navigate("SubjectScreen?subjectId=${subjectId}")
+        },
         onAddTaskButtonClick = {
-            val navArg = TaskScreenNavArgs(taskId = null, subjectId = state.currentSubjectId)
+            TaskScreenNavArgs(taskId = null, subjectId = state.currentSubjectId)
             navController.navigate(ROUTE_TASK)
         },
         onTaskCardClick = { taskId ->
-            val navArg = TaskScreenNavArgs(taskId = taskId, subjectId = null)
+            TaskScreenNavArgs(taskId = taskId, subjectId = null)
             navController.navigate(ROUTE_SESSION)
         }
     )
@@ -262,7 +262,7 @@ private fun SubjectScreenTopBar(
         navigationIcon = {
             IconButton(onClick = onBackButtonClick) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "navigate back"
                 )
             }
@@ -340,4 +340,8 @@ private fun SubjectOverviewSection(
             Text(text = "$percentageProgress%")
         }
     }
+}
+@Composable
+fun SubjectPreview() {
+    SubjectScreenRoute(navController = rememberNavController())
 }

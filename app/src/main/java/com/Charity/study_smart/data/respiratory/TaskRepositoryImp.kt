@@ -19,17 +19,17 @@ class TaskRepositoryImpl @Inject constructor(
         taskDao.deleteTask(taskId)
     }
 
-    override suspend fun getTaskById(taskId: Int): Task? {
+    override suspend fun getTaskById(taskId: String): Task? {
         return taskDao.getTaskById(taskId)
     }
 
-    override fun getUpcomingTasksForSubject(subjectId: Int): Flow<List<Task>> {
+    override fun getUpcomingTasksForSubject(subjectId: String): Flow<List<Task>> {
         return taskDao.getTasksForSubject(subjectId)
             .map { tasks -> tasks.filter { it.isComplete.not() } }
             .map { tasks -> sortTasks(tasks) }
     }
 
-    override fun getCompletedTasksForSubject(subjectId: Int): Flow<List<Task>> {
+    override fun getCompletedTasksForSubject(subjectId: String): Flow<List<Task>> {
         return taskDao.getTasksForSubject(subjectId)
             .map { tasks -> tasks.filter { it.isComplete } }
             .map { tasks -> sortTasks(tasks) }

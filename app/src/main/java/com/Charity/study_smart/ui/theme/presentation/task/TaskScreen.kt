@@ -1,8 +1,10 @@
 package com.Charity.study_smart.ui.theme.presentation.task
 
-import android.graphics.Color
+
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -48,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.Charity.study_smart.ui.theme.presentation.Dashboard.DashboardScreenRoute
 import com.Charity.study_smart.ui.theme.presentation.components.DeleteDialog
 import com.Charity.study_smart.ui.theme.presentation.components.SubjectListBottomSheet
 import com.Charity.study_smart.ui.theme.presentation.components.TaskCheckBox
@@ -81,6 +84,7 @@ fun TaskScreenRoute(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TaskScreen(
@@ -93,9 +97,7 @@ private fun TaskScreen(
     var isDeleteDialogOpen by rememberSaveable { mutableStateOf(false) }
 
     var isDatePickerDialogOpen by rememberSaveable { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = Instant.now().toEpochMilli()
-    )
+    val datePickerState = rememberDatePickerState()
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
@@ -228,7 +230,18 @@ private fun TaskScreen(
             Spacer(modifier = Modifier.height(10.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
                 Priority.entries.forEach { priority ->
-                    PriorityButton()
+                    PriorityButton(
+                        modifier = Modifier.weight(1f),
+                        label = priority.title,
+                        backgroundColor = priority.color,
+                        borderColor = if (priority == state.priority) {
+                            Color.White
+                        } else Color.Transparent,
+                        labelColor = if (priority == state.priority) {
+                            Color.White
+                        } else Color.White.copy(alpha = 0.7f),
+                        onClick = { onEvent(TaskEvent.OnPriorityChange(priority)) }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(30.dp))
@@ -313,9 +326,9 @@ private fun TaskScreenTopBar(
 private fun PriorityButton(
     modifier: Modifier = Modifier,
     label: String,
-    backgroundColor: androidx.compose.ui.graphics.Color,
+    backgroundColor: Color,
     borderColor: Color,
-    labelColor: Int,
+    labelColor: Color,
     onClick: () -> Unit
 ) {
     Box(
@@ -327,6 +340,14 @@ private fun PriorityButton(
             .padding(5.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "label", color = labelColor)
+        Text(
+            text = "Label",
+            modifier= modifier,
+            color = Color.White
+        )
     }
+}
+@Composable
+fun TaskPreview() {
+    TaskScreenRoute(navController = rememberNavController())
 }

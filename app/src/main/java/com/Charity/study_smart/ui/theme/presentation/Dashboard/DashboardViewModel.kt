@@ -1,5 +1,29 @@
 package com.Charity.study_smart.ui.theme.presentation.Dashboard
 
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.Charity.study_smart.domain.model.Session
+import com.Charity.study_smart.domain.model.Subject
+import com.Charity.study_smart.domain.model.Task
+import com.Charity.study_smart.domain.repository.SessionRepository
+import com.Charity.study_smart.domain.repository.SubjectRepository
+import com.Charity.study_smart.domain.repository.TaskRepository
+import com.Charity.study_smart.ui.theme.util.SnackbarEvent
+import com.Charity.study_smart.ui.theme.util.toHours
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(

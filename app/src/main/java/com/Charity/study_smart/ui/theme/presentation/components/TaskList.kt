@@ -63,15 +63,9 @@ fun LazyListScope.tasksList(
             }
         }
     }
-    items(tasks) { task ->
-        TaskCard(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-            task = task,
-            onCheckBoxClick = { onCheckBoxClick(task) },
-            onClick = { onTaskCardClick(task.taskId) }
-        )
+
     }
-}
+
 
 @Composable
 private fun TaskCard(
@@ -114,3 +108,10 @@ private fun TaskCard(
         }
     }
 }
+//items(tasks) { task ->
+//    TaskCard(
+//        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+//        task = task,
+//        onCheckBoxClick = { onCheckBoxClick(task) },
+//        onClick = { onTaskCardClick(task.taskId) }
+//    )

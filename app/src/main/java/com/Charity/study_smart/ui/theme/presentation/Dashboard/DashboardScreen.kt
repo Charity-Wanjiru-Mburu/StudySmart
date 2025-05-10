@@ -54,12 +54,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.Charity.study_smart.navigation.ROUTE_SESSION
 import com.Charity.study_smart.navigation.ROUTE_SUBJECT
 import com.Charity.study_smart.navigation.ROUTE_TASK
@@ -79,10 +81,9 @@ fun DashboardScreenRoute(
 ) {
 
     val viewModel: DashboardViewModel = hiltViewModel()
-    val state by viewModel.state
-    val tasks by viewModel.tasks
-    val recentSessions by viewModel.recentSessions
-
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val tasks by viewModel.tasks.collectAsStateWithLifecycle()
+    val recentSessions by viewModel.recentSessions.collectAsStateWithLifecycle()
     DashboardScreen(
         state = state,
         tasks = tasks,
@@ -92,7 +93,7 @@ fun DashboardScreenRoute(
         onSubjectCardClick = { subjectId ->
             subjectId?.let {
                 val navArg = SubjectScreenNavArgs(subjectId = subjectId)
-                navController.navigate(ROUTE_SUBJECT)
+                navController.navigate("SubjectScreen?subjectId=$subjectId")
             }
         },
         onTaskCardClick = { taskId ->
@@ -323,4 +324,8 @@ private fun SubjectCardsSection(
             }
         }
     }
+}
+@Composable
+fun DashboardPreview() {
+    DashboardScreenRoute(navController = rememberNavController())
 }

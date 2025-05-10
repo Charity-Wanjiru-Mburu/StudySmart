@@ -31,7 +31,7 @@ class SessionRepositoryImpl @Inject constructor(
             .take(count = 5)
     }
 
-    override fun getRecentTenSessionsForSubject(subjectId: Int): Flow<List<Session>> {
+    override fun getRecentTenSessionsForSubject(subjectId: String): Flow<List<Session>> {
         return sessionDao.getRecentSessionsForSubject(subjectId)
             .map { sessions -> sessions.sortedByDescending { it.date } }
             .take(count = 10)
@@ -41,7 +41,7 @@ class SessionRepositoryImpl @Inject constructor(
         return sessionDao.getTotalSessionsDuration()
     }
 
-    override fun getTotalSessionsDurationBySubject(subjectId: Int): Flow<Long> {
+    override fun getTotalSessionsDurationBySubject(subjectId: String): Flow<Long> {
         return sessionDao.getTotalSessionsDurationBySubject(subjectId)
     }
 }
